@@ -1,10 +1,10 @@
 const initModel = {
-  description: '',
-  calores: 0,
+  description: 'Breakfast',
+  calories: 480,
   showForm: false,
   nextId: 0,
   editId: null,
-  meals: [],
+  meals: []
 }
 
 export default initModel
