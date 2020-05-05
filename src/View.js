@@ -7,7 +7,7 @@ import {
   caloriesInputMsg,
   saveMealMsg,
   deleteMealMsg,
-  editMealMsg,
+  editMealMsg
 } from './Update'
 
 const {
@@ -24,10 +24,10 @@ const {
   tr,
   th,
   td,
-  i,
+  i
 } = hh(h)
 
-function cell(tag, className, value) {
+function cell (tag, className, value) {
   return tag({ className }, value)
 }
 
@@ -35,28 +35,28 @@ const tableHeader = thead([
   tr([
     cell(th, 'pa2 tl', 'Meal'),
     cell(th, 'pa2 tr', 'Calories'),
-    cell(th, '', ''),
-  ]),
+    cell(th, '', '')
+  ])
 ])
 
-function mealRow(dispatch, className, meal) {
+function mealRow (dispatch, className, meal) {
   return tr({ className }, [
     cell(td, 'pa2', meal.description),
     cell(td, 'pa2 tr', meal.calories),
     cell(td, 'pa2 tr', [
       i({
         className: 'ph1 fa fa-trash-o pointer',
-        onclick: () => dispatch(deleteMealMsg(meal.id)),
+        onclick: () => dispatch(deleteMealMsg(meal.id))
       }),
       i({
         className: 'ph1 fa fa-pencil-square-o pointer',
-        onclick: () => dispatch(editMealMsg(meal.id)),
-      }),
-    ]),
+        onclick: () => dispatch(editMealMsg(meal.id))
+      })
+    ])
   ])
 }
 
-function totalRow(meals) {
+function totalRow (meals) {
   const total = R.pipe(
     R.map((meal) => meal.calories),
     R.sum
@@ -64,11 +64,11 @@ function totalRow(meals) {
   return tr({ className: 'bt b' }, [
     cell(td, 'pa2 tr', 'Total:'),
     cell(td, 'pa2 tr', total),
-    cell(td, '', ''),
+    cell(td, '', '')
   ])
 }
 
-function mealsBody(dispatch, className, meals) {
+function mealsBody (dispatch, className, meals) {
   const rows = R.map(R.partial(mealRow, [dispatch, 'stripe-dark']), meals)
 
   const rowsWithTotal = [...rows, totalRow(meals)]
@@ -76,34 +76,34 @@ function mealsBody(dispatch, className, meals) {
   return tbody({ className }, rowsWithTotal)
 }
 
-function tableView(dispatch, meals) {
+function tableView (dispatch, meals) {
   if (meals.length === 0) {
     return div({ className: 'mv2 i black-50' }, 'No meals to display...')
   }
   return table({ className: 'mv2 w-100 collapse' }, [
     tableHeader,
-    mealsBody(dispatch, '', meals),
+    mealsBody(dispatch, '', meals)
   ])
 }
 
-function fieldSet(labelText, inputValue, oninput) {
+function fieldSet (labelText, inputValue, oninput) {
   return div([
     label({ className: 'db mb1' }, labelText),
     input({
       className: 'pa2 input-reset ba w-100 mb2',
       type: 'text',
       value: inputValue,
-      oninput,
-    }),
+      oninput
+    })
   ])
 }
 
-function buttonSet(dispatch) {
+function buttonSet (dispatch) {
   return div([
     button(
       {
         className: 'f3 pv2 ph3 bg-blue white bn mr2 dim',
-        type: 'submit',
+        type: 'submit'
       },
       'Save'
     ),
@@ -111,14 +111,14 @@ function buttonSet(dispatch) {
       {
         className: 'f3 pv2 ph3 bn bg-light-gray dim',
         type: 'button',
-        onclick: () => dispatch(showFormMsg(false)),
+        onclick: () => dispatch(showFormMsg(false))
       },
       'Cancel'
-    ),
+    )
   ])
 }
 
-function formView(dispatch, model) {
+function formView (dispatch, model) {
   const { description, calories, showForm } = model
   if (showForm) {
     return form(
@@ -127,7 +127,7 @@ function formView(dispatch, model) {
         onsubmit: (e) => {
           e.preventDefault()
           dispatch(saveMealMsg)
-        },
+        }
       },
       [
         fieldSet('Meal', description, (e) =>
@@ -136,24 +136,24 @@ function formView(dispatch, model) {
         fieldSet('Calories', calories || '', (e) =>
           dispatch(caloriesInputMsg(e.target.value))
         ),
-        buttonSet(dispatch),
+        buttonSet(dispatch)
       ]
     )
   }
   return button(
     {
       className: 'f3 pv2 ph3 bg-blue white bn',
-      onclick: () => dispatch(showFormMsg(true)),
+      onclick: () => dispatch(showFormMsg(true))
     },
     'Add Meal'
   )
 }
 
-function view(dispatch, model) {
+function view (dispatch, model) {
   return div({ className: 'mw6 center' }, [
     h1({ className: 'f2 pv2 bb' }, 'Calorie Counter'),
     formView(dispatch, model),
-    tableView(dispatch, model.meals),
+    tableView(dispatch, model.meals)
     // pre(JSON.stringify(model, null, 2)),
   ])
 }
